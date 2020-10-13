@@ -1,0 +1,18 @@
+{
+    "name": "Pluralsight Bot",
+    "description": "",
+    "services": [
+        {
+            "type": "endpoint",
+            "appId": "",
+            "appPassword": "",
+            "endpoint": "http://localhost:3978/api/messages",
+            "id": "7cb1cf20-0d29-11eb-b476-83b61f7a0fc2",
+            "name": "http://localhost:3978/api/messages"
+        }
+    ],
+    "padlock": "",
+    "version": "2.0",
+    "overrides": null,
+    "path": "D:\\Documents\\Dev-Repo\\microsoft-bot-framework-getting-started-kruczek\\PluralsightBot\\Pluralsight Bot.bot"
+}

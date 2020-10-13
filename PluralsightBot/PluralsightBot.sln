@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30523.141
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PluralsightBot", "PluralsightBot\PluralsightBot.csproj", "{F1E30998-C44E-481B-B997-FD4865CC55FD}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F1E30998-C44E-481B-B997-FD4865CC55FD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F1E30998-C44E-481B-B997-FD4865CC55FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F1E30998-C44E-481B-B997-FD4865CC55FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F1E30998-C44E-481B-B997-FD4865CC55FD}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {752BADD4-C242-46C6-82B4-9C30CE20F5E0}
+	EndGlobalSection
+EndGlobal
