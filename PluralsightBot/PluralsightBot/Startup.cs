@@ -13,6 +13,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
 using PluralsightBot.Bots;
+using PluralsightBot.Dialogs;
 using PluralsightBot.Services;
 
 namespace PluralsightBot
@@ -42,13 +43,18 @@ namespace PluralsightBot
              * injected in our constructor
              */
             ConfigureState(services);
+            /**
+             * We need to instantiate the MainDialog since we will be injecting
+             * it in the next line.
+             */
+            services.AddSingleton<MainDialog>();
             /** 
              * Create the bot as a transient. In this case the ASP Controller is expecting an IBot.
              *
              * Anytime we encounter an object with the type of IBot, use an instance of the
              * EchoBot
              */
-            services.AddTransient<IBot, GreetingBot>();            
+            services.AddTransient<IBot, DialogBot<MainDialog>>();            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

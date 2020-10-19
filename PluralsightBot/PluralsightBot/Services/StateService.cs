@@ -1,4 +1,5 @@
 ﻿using Microsoft.Bot.Builder;
+using Microsoft.Bot.Builder.Dialogs;
 using PluralsightBot.Models;
 using System;
 
@@ -16,17 +17,23 @@ namespace PluralsightBot.Services
          */
         public UserState UserState { get; }
         /**
+         * This is for our dialogs
+         */
+        public DialogState DialogState { get; }
+        /**
          * This is our accessor. This will allow us to push, pull, and delete data
          * from our property inside our state bucket.
          */
         public IStatePropertyAccessor<UserProfile> UserProfileAccessor { get; set; }
         public IStatePropertyAccessor<ConversationData> ConversationDataAccessor { get; set; }
+        public IStatePropertyAccessor<DialogState> DialogStateAccessor { get; set; }
         /**
          * The next thing we need is somehow to identify the user profile data inside
          * the user bucket.
          */
         private static string UserProfileId { get; } = $"{nameof(StateService)}.UserProfile";
         private static string ConversationDataId { get; } = $"{nameof(StateService)}.ConversationData";
+        private static string DialogStateId { get; } = $"{nameof(StateService)}.DialogState";
         public StateService(UserState userState, ConversationState conversationState)
         {
             UserState = userState ?? throw new ArgumentNullException(nameof(userState));
@@ -47,6 +54,7 @@ namespace PluralsightBot.Services
              */
             UserProfileAccessor = UserState.CreateProperty<UserProfile>(UserProfileId);
             ConversationDataAccessor = ConversationState.CreateProperty<ConversationData>(ConversationDataId);
+            DialogStateAccessor = ConversationState.CreateProperty<DialogState>(DialogStateId);
 
         }
     }
