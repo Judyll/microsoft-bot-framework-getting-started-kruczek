@@ -38,6 +38,8 @@ namespace PluralsightBot
 
             // Create the Bot Framework Adapter with error handling enabled.
             services.AddSingleton<IBotFrameworkHttpAdapter, AdapterWithErrorHandler>();
+            // Create the instance of the bot service
+            services.AddSingleton<BotService>();
             /**
              * Our StateService is expecting UserState and ConversationState to be
              * injected in our constructor

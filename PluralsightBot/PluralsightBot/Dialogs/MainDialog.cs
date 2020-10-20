@@ -1,4 +1,5 @@
-﻿using Microsoft.Bot.Builder.Dialogs;
+﻿using Microsoft.Bot.Builder;
+using Microsoft.Bot.Builder.Dialogs;
 using PluralsightBot.Services;
 using System;
 using System.Text.RegularExpressions;
@@ -10,11 +11,13 @@ namespace PluralsightBot.Dialogs
     public class MainDialog : ComponentDialog
     {
         private readonly StateService _stateService;
+        private readonly BotService _botService;
 
-        public MainDialog(StateService stateService) 
+        public MainDialog(StateService stateService, BotService botService) 
             : base(nameof(MainDialog))
         {
             _stateService = stateService ?? throw new ArgumentNullException(nameof(stateService));
+            _botService = botService ?? throw new ArgumentNullException(nameof(botService));
 
             InitializeWaterfallDialog();
         }
@@ -41,6 +44,7 @@ namespace PluralsightBot.Dialogs
             AddDialog(new WaterfallDialog($"{nameof(MainDialog)}.mainFlow", waterfallSteps));
             AddDialog(new GreetingDialog($"{nameof(MainDialog)}.greeting", _stateService));
             AddDialog(new BugReportDialog($"{nameof(MainDialog)}.bugReport", _stateService));
+            AddDialog(new BugTypeDialog($"{nameof(MainDialog)}.bugType", _stateService, _botService));
 
             // Set the starting dialog
             InitialDialogId = $"{nameof(MainDialog)}.mainFlow";
@@ -53,16 +57,45 @@ namespace PluralsightBot.Dialogs
              * the greeting dialog will be activated.  If not, then the bug report
              * dialog will be activated.
              */
-            if (Regex.Match(stepContext.Context.Activity.Text.ToLower(), "hi").Success)
+            //if (Regex.Match(stepContext.Context.Activity.Text.ToLower(), "hi").Success)
+            //{
+            //    return await stepContext.BeginDialogAsync($"{nameof(MainDialog)}.greeting",
+            //        null, cancellationToken);
+            //}
+            //else
+            //{
+            //    return await stepContext.BeginDialogAsync($"{nameof(MainDialog)}.bugReport",
+            //        null, cancellationToken);
+            //}
+            /**
+             * First, we use the dispatch model to determine which 
+             * cognitive service (LUIS or QnA) to use
+             */
+            var recognizerResult = await _botService.Dispatch.RecognizeAsync(stepContext.Context,
+                cancellationToken);
+            /**
+             * top intent tell us which cognitive service to use
+             */
+            var topIntent = recognizerResult.GetTopScoringIntent();
+
+            switch (topIntent.intent)
             {
-                return await stepContext.BeginDialogAsync($"{nameof(MainDialog)}.greeting",
-                    null, cancellationToken);
+                case "GreetingIntent":
+                    return await stepContext.BeginDialogAsync($"{nameof(MainDialog)}.greeting",
+                        null, cancellationToken);
+                case "NewBugReportIntent":
+                    return await stepContext.BeginDialogAsync($"{nameof(MainDialog)}.bugReport",
+                        null, cancellationToken);
+                case "QueryBugTypeIntent":
+                    return await stepContext.BeginDialogAsync($"{nameof(MainDialog)}.bugType",
+                        null, cancellationToken);
+                default:
+                    await stepContext.Context.SendActivityAsync(MessageFactory.Text($"I'm sorry I don't know what you mean."),
+                        cancellationToken);
+                    break;
             }
-            else
-            {
-                return await stepContext.BeginDialogAsync($"{nameof(MainDialog)}.bugReport",
-                    null, cancellationToken);
-            }
+
+            return await stepContext.NextAsync(null, cancellationToken);
         }
         private async Task<DialogTurnResult> FinalStepAsync(WaterfallStepContext stepContext,
             CancellationToken cancellationToken)
